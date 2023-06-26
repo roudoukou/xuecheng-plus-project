@@ -29,7 +29,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 根据名称模糊查询, 在sql中拼接 course_base.name like '%值%'
         queryWrapper.like(StringUtils.isNotEmpty(courseParamsDto.getCourseName()), CourseBase::getName, courseParamsDto.getCourseName());
 
-        // todo 按课程发布状态查询
+        // 按课程发布状态查询
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getPublishStatus()), CourseBase::getStatus, courseParamsDto.getPublishStatus());
 
         // 根据课程审核状态查询course_base.audit_status = ?
