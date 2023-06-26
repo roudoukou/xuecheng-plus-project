@@ -1,4 +1,4 @@
-package com.xuecheng.content;
+package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,31 +7,21 @@ import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
+import com.xuecheng.content.service.CourseBaseInfoService;
 import org.apache.commons.lang.StringUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@SpringBootTest
-public class CourseBaseMapperTests {
+@Service
+public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
+
     @Autowired
     private CourseBaseMapper courseBaseMapper;
-    @Test
-    public void testCourseBaseMapper() {
-        CourseBase courseBase = courseBaseMapper.selectById(18L);
-        Assertions.assertNotNull(courseBase);
 
-        System.out.println(courseBase);
-        // 详细进行分页查询的单元测试
-        // 查询条件
-        QueryCourseParamsDto courseParamsDto = new QueryCourseParamsDto();
-        // 课程名称查询条件
-        // courseParamsDto.setCourseName("java");
-
-        courseParamsDto.setAuditStatus("202004");
+    @Override
+    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
 
         // 凭借查询条件
         LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
@@ -45,10 +35,6 @@ public class CourseBaseMapperTests {
         // 根据课程审核状态查询course_base.audit_status = ?
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getAuditStatus()), CourseBase::getAuditStatus, courseParamsDto.getAuditStatus());
 
-        // 分页参数对象
-        PageParams pageParams = new PageParams();
-        pageParams.setPageNo(1L);
-        pageParams.setPageSize(2L);
 
         // 创建page分页参数对象, 参数: 当前页码, 每页记录数
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
@@ -63,6 +49,6 @@ public class CourseBaseMapperTests {
         // List<T> items, long counts, long page, long pageSize
         PageResult<CourseBase> courseBasePageResult = new PageResult<CourseBase>(items, total, pageParams.getPageNo(), pageParams.getPageSize());
         System.out.println(courseBasePageResult);
-
+        return courseBasePageResult;
     }
 }
