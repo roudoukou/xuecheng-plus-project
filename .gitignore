@@ -31,3 +31,6 @@ logs/
 
 ### VS Code ###
 .vscode/
+
+# Dependency directories
+node_modules/
