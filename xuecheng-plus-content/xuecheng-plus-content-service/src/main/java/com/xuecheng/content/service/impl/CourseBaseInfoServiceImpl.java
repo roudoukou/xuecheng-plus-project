@@ -2,6 +2,7 @@ package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xuecheng.base.execption.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
@@ -75,31 +76,32 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     public CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto) {
         //合法性校验
         if (StringUtils.isBlank(addCourseDto.getName())) {
-            throw new RuntimeException("课程名称为空");
+            // throw new XueChengPlusException("课程名称为空");
+            throw new XueChengPlusException("课程名称为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getMt())) {
-            throw new RuntimeException("课程分类为空");
+            throw new XueChengPlusException("课程分类为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getSt())) {
-            throw new RuntimeException("课程分类为空");
+            throw new XueChengPlusException("课程分类为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getGrade())) {
-            throw new RuntimeException("课程等级为空");
+            throw new XueChengPlusException("课程等级为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getTeachmode())) {
-            throw new RuntimeException("教育模式为空");
+            throw new XueChengPlusException("教育模式为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getUsers())) {
-            throw new RuntimeException("适应人群为空");
+            throw new XueChengPlusException("适应人群为空");
         }
 
         if (StringUtils.isBlank(addCourseDto.getCharge())) {
-            throw new RuntimeException("收费规则为空");
+            throw new XueChengPlusException("收费规则为空");
         }
 
         // 新增对象
@@ -118,7 +120,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 插入课程基本信息表
         int insert = courseBaseMapper.insert(courseBaseNew);
         if (insert <= 0) {
-            throw new RuntimeException("新增课程基本信息失败");
+            throw new XueChengPlusException("新增课程基本信息失败");
         }
         // 向课程营销表保存课程营销信息
         // 课程营销信息
@@ -128,7 +130,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         courseMarketNew.setId(courseId);
         int i = saveCourseMarket(courseMarketNew);
         if (i <= 0) {
-            throw new RuntimeException("保存课程营销信息失败");
+            throw new XueChengPlusException("保存课程营销信息失败");
         }
 
         // 查询课程基本信息及营销信息并返回
@@ -168,13 +170,14 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 收费规则
         String charge = courseMarketNew.getCharge();
         if (StringUtils.isBlank(charge)) {
-            throw new RuntimeException("收费规则没有选择");
+            throw new XueChengPlusException("收费规则没有选择");
         }
 
         // 收费规则为收费
         if (charge.equals("201001")) {
             if (courseMarketNew.getPrice() == null || courseMarketNew.getPrice() <= 0) {
-                throw new RuntimeException("课程为收费价格不能为空且必须大于0");
+                throw new XueChengPlusException("课程为收费价格不能为空且必须大于0");
+                // XueChengPlusException.cast("课程为收费价格不能为空且必须大于0");
             }
         }
 
