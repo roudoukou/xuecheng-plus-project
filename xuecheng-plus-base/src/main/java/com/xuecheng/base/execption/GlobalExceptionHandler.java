@@ -1,8 +1,14 @@
 package com.xuecheng.base.execption;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @ControllerAdvice
@@ -23,4 +29,22 @@ public class GlobalExceptionHandler {
         return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
     }
 
+    @ResponseBody
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RestErrorResponse methodArgumentNotValidExceptionException(MethodArgumentNotValidException e) {
+        // 存储错误信息
+        List<String> errors = new ArrayList<>();
+
+        BindingResult bindingResult = e.getBindingResult();
+        bindingResult.getFieldErrors().stream().forEach(
+                item -> errors.add(item.getDefaultMessage())
+        );
+
+        // 将list中的错误信息拼接起来
+        String errMessage = StringUtils.join(errors, ",");
+
+        log.error("【系统异常】{}", e.getMessage(), errMessage);
+        return new RestErrorResponse(errMessage);
+    }
 }
