@@ -7,3 +7,26 @@ Content-Type: application/json
   "courseName": "java",
   "publishStatus": ""
 }
+
+### 创建课程
+POST {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "JavaScript",
+  "pic": "",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "123",
+  "grade": "204001",
+  "description": "123",
+  "charge": "201000",
+  "price": 11,
+  "originalPrice":11,
+  "qq": "",
+  "wechat": "",
+  "phone": "",
+  "validDays": 365
+}
