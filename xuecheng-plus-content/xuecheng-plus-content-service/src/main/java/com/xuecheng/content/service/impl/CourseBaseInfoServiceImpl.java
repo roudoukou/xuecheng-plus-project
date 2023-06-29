@@ -201,7 +201,8 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 更新营销信息
         CourseMarket courseMarket = new CourseMarket();
         BeanUtils.copyProperties(editCourseDto, courseMarket);
-        int i1 = courseMarketMapper.updateById(courseMarket);
+
+        int i1 = saveCourseMarket(courseMarket);
         if (i1 <= 0) {
             throw new XueChengPlusException("修改营销信息失败");
         }
