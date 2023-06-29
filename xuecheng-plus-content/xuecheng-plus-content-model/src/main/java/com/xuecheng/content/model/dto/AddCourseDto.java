@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -58,8 +59,10 @@ public class AddCourseDto {
     @ApiModelProperty(value = "收费规则，对应数据字典", required = true)
     private String charge;
 
+    @Min(value = 0, message = "价格不能小于0或者负数", groups = {ValidationGroups.Update.class, ValidationGroups.Insert.class})
     @ApiModelProperty(value = "价格")
     private Float price;
+    @Min(value = 0, message = "价格不能小于0或者负数", groups = {ValidationGroups.Update.class, ValidationGroups.Insert.class})
     @ApiModelProperty(value = "原价")
     private Float originalPrice;
 
