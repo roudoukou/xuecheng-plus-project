@@ -260,6 +260,9 @@ export default class extends mixins(MixinTools) {
       if (data) {
         data.teachPlanTreeNodes = data.map((v: any) => {
           // this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
+          // console.log('v', v);
+          // debugger
+
           v.ctlEditTitle = false
           v.ctlBarShow = false
           // 三级
@@ -301,8 +304,8 @@ export default class extends mixins(MixinTools) {
       courseId: this.courseBaseId,
       parentid: 0,
       grade: 1,
-      pname: '新章名称 [点击修改]'
-      // mediaType: '',
+      pname: '新章名称 [点击修改]',
+      mediaType: ''
       // ctlEditTitle: false,
       // ctlBarShow: false
       // teachPlanTreeNodes: []
@@ -321,8 +324,8 @@ export default class extends mixins(MixinTools) {
       courseId: this.courseBaseId,
       parentid: parentid,
       grade: 2,
-      pname: '新小节名称 [点击修改]'
-      // mediaType: '',
+      pname: '新小节名称 [点击修改]',
+      mediaType: ''
       // isPreview: '0',
       // ctlEditTitle: false,
       // ctlBarShow: false

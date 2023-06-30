@@ -12,6 +12,6 @@ public class TeachplanDto extends Teachplan {
     private TeachplanMedia teachplanMedia;
 
     // 小章节list
-    private List<TeachplanDto> teachplanTreeNodes;
+    private List<TeachplanDto> teachPlanTreeNodes;
 
 }

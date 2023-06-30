@@ -39,7 +39,7 @@
         <result column="one_courseId" property="courseId"/>
         <result column="one_coursePubId" property="coursePubId"/>
         <!-- 映射子节点, 一对多映射, ofType list中的对象类型 -->
-        <collection property="teachplanTreeNodes" ofType="com.xuecheng.content.model.dto.TeachplanDto">
+        <collection property="teachPlanTreeNodes" ofType="com.xuecheng.content.model.dto.TeachplanDto">
             <id column="two_id" property="id"/>
             <result column="two_pname" property="pname"/>
             <result column="two_parentid" property="parentid"/>
@@ -87,11 +87,12 @@
                tm.id             teachplanMeidaId,
                tm.media_id       mediaId
         from teachplan one
-                 inner join teachplan two on two.parentid = one.id
+                 left join teachplan two on two.parentid = one.id
                  left join teachplan_media tm on two.id = tm.teachplan_id
 
         where one.parentid = 0
           and one.course_id = #{courseId}
+        order by one.orderby, two.orderby
     </select>
 
 </mapper>
