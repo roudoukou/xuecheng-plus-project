@@ -116,4 +116,69 @@
         ORDER BY one.`orderby`, two.`orderby`
     </select>
 
+    <select id="getTeachplanMax" resultType="java.lang.Integer">
+        SELECT MAX(orderby)+1 FROM `teachplan`
+        WHERE course_id = #{courseId}
+          AND parentid = #{parentid}
+    </select>
+
+    <select id="getLastOrderNode" resultType="com.xuecheng.content.model.po.Teachplan">
+        SELECT *
+        FROM teachplan
+        WHERE orderby &lt; #{orderby}
+          AND parentid = (
+            SELECT parentid FROM teachplan WHERE id = #{id}
+        )
+          AND course_id = (
+            SELECT course_id FROM teachplan WHERE id = #{id}
+        )
+        ORDER BY orderby DESC
+        LIMIT 1
+    </select>
+
+    <select id="getNextOrderNode" resultType="com.xuecheng.content.model.po.Teachplan">
+        SELECT *
+        FROM teachplan
+        WHERE orderby > #{orderby}
+          AND parentid = (
+            SELECT parentid FROM teachplan WHERE id = #{id}
+        )
+          AND course_id = (
+            SELECT course_id FROM teachplan WHERE id = #{id}
+        )
+        ORDER BY orderby
+            LIMIT 1
+    </select>
+    <!--
+    /*
+        SELECT *
+        FROM teachplan
+        WHERE orderby = (
+            SELECT MIN(orderby) FROM teachplan
+            WHERE orderby > (
+                SELECT orderby FROM teachplan
+                WHERE id = #{id}
+            )
+              AND id IN (
+                SELECT id
+                FROM teachplan
+                WHERE teachplan.parentid = (
+                    SELECT parentid
+                    FROM teachplan
+                    WHERE id = #{id}
+                )
+            )
+        )
+          AND id IN (
+            SELECT id
+            FROM teachplan
+            WHERE teachplan.parentid = (
+                SELECT parentid
+                FROM teachplan
+                WHERE id = #{id}
+            )
+        )
+        LIMIT 1
+        ;*/-->
+
 </mapper>

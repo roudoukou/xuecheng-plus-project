@@ -32,6 +32,7 @@ public class TeachplanServiceImpl implements TeachplanService {
         return teachplanDtos;
     }
 
+    @Transactional
     @Override
     public void saveTeachplan(SaveTeachplanDto saveTeachplanDto) {
         // 通过课程计划id判断是新增和修改
@@ -43,7 +44,7 @@ public class TeachplanServiceImpl implements TeachplanService {
             // 确定排序字段, 找到它的同级节点个数, 排序字段就是个数加1
             Long courseId = saveTeachplanDto.getCourseId();
             Long parentid = saveTeachplanDto.getParentid();
-            int teachplanCount = getTeachplanCount(courseId, parentid);
+            int teachplanCount = getTeachplanMax(courseId, parentid);
             teachplan.setOrderby(teachplanCount);
 
             teachplanMapper.insert(teachplan);
@@ -95,6 +96,62 @@ public class TeachplanServiceImpl implements TeachplanService {
         }
     }
 
+    @Transactional
+    @Override
+    public void moveUpTeachPlan(Long id) {
+        Teachplan currentOrderNode = teachplanMapper.selectById(id);
+
+        if (currentOrderNode == null) {
+            throw new XueChengPlusException(CommonError.UNKOWN_ERROR.getErrMessage());
+        }
+
+        // 查询id节点的上一个节点
+        Integer orderby = currentOrderNode.getOrderby();
+        Teachplan lastOrderNode = teachplanMapper.getLastOrderNode(orderby, id);
+
+        if (lastOrderNode == null) {
+            throw new XueChengPlusException("不能上移了...");
+        }
+
+        Integer lastOrderNum = lastOrderNode.getOrderby();
+        Integer currentOrderNum = currentOrderNode.getOrderby();
+
+        // 对调上一个节点跟当前节点的orderby
+        lastOrderNode.setOrderby(currentOrderNum);
+        currentOrderNode.setOrderby(lastOrderNum);
+
+        teachplanMapper.updateById(lastOrderNode);
+        teachplanMapper.updateById(currentOrderNode);
+    }
+
+    @Transactional
+    @Override
+    public void moveDownTeachPlan(Long id) {
+        Teachplan currentOrderNode = teachplanMapper.selectById(id);
+
+        if (currentOrderNode == null) {
+            throw new XueChengPlusException(CommonError.UNKOWN_ERROR.getErrMessage());
+        }
+
+        // 查询id节点的下一个节点
+        Integer orderby = currentOrderNode.getOrderby();
+        Teachplan nextOrderNode = teachplanMapper.getNextOrderNode(orderby, id);
+
+        if (nextOrderNode == null) {
+            throw new XueChengPlusException("不能下移了...");
+        }
+
+        Integer nextOrderNum = nextOrderNode.getOrderby();
+        Integer currentOrderNum = currentOrderNode.getOrderby();
+
+        // 对调上一个节点跟当前节点的orderby
+        nextOrderNode.setOrderby(currentOrderNum);
+        currentOrderNode.setOrderby(nextOrderNum);
+
+        teachplanMapper.updateById(nextOrderNode);
+        teachplanMapper.updateById(currentOrderNode);
+    }
+
     /**
      * 查询当前章节id下是否有子章节
      * @param id 章节id
@@ -111,9 +168,18 @@ public class TeachplanServiceImpl implements TeachplanService {
         }
     }
 
+    private int getTeachplanMax(Long courseId, Long parentid) {
+        Integer teachplanMax = teachplanMapper.getTeachplanMax(courseId, parentid);
+        if (teachplanMax == null) {
+            return 0;
+        }
+        return teachplanMax;
+    }
+
     private int getTeachplanCount(Long courseId, Long parentid) {
         LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Teachplan::getCourseId, courseId).eq(Teachplan::getParentid, parentid);
+        queryWrapper.eq(Teachplan::getCourseId, courseId)
+                .eq(Teachplan::getParentid, parentid);
         Integer integer = teachplanMapper.selectCount(queryWrapper);
         return integer+1;
     }

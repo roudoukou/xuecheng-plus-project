@@ -24,4 +24,8 @@ public interface TeachplanService {
     void saveTeachplan(@RequestBody SaveTeachplanDto saveTeachplanDto);
 
     void deleteTeachPlan(Long courseId);
+
+    void moveUpTeachPlan(Long id);
+
+    void moveDownTeachPlan(Long id);
 }
