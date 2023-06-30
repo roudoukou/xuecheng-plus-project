@@ -31,8 +31,12 @@ public class TeachplanController {
     @PostMapping("/teachplan")
     public void saveTeachplan(@RequestBody /*@Validated*/ SaveTeachplanDto saveTeachplanDto) {
         teachplanService.saveTeachplan(saveTeachplanDto);
+    }
 
-        // getTreeNodes(saveTeachplanDto.getCourseId());
+    @ApiOperation("删除课程计划")
+    @DeleteMapping("/teachplan/{id}")
+    public void deleteTeachPlan(@PathVariable Long id) {
+        teachplanService.deleteTeachPlan(id);
     }
 
 }

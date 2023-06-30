@@ -18,6 +18,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse customException(XueChengPlusException e) {
         log.error("【系统异常】{}", e.getErrMessage(), e);
+        if (e.getErrCode() != null) {
+            return new RestErrorResponse(e.getErrCode(), e.getErrMessage());
+        }
         return new RestErrorResponse(e.getErrMessage());
     }
 

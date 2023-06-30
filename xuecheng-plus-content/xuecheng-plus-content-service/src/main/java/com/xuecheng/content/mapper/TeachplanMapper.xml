@@ -95,4 +95,25 @@
         order by one.orderby, two.orderby
     </select>
 
+    <resultMap id="childrenList" type="com.xuecheng.content.model.dto.TeachplanDto">
+        <id column="one_id" property="id"/>
+        <result column="one_pname" property="pname"/>
+        <collection property="teachPlanTreeNodes" ofType="com.xuecheng.content.model.dto.TeachplanDto">
+            <id column="two_id" property="parentid"/>
+            <result column="two_pname" property="pname"/>
+        </collection>
+    </resultMap>
+
+    <select id="getChildrenList" parameterType="java.lang.Long" resultMap="childrenList">
+        SELECT one.id one_id,
+               one.pname one_pname,
+               two.id two_id,
+               two.`pname` two_pname
+        FROM `teachplan` `one`
+                 JOIN `teachplan` `two`
+                      ON one.id = #{id}
+                          AND one.id = two.`parentid`
+        ORDER BY one.`orderby`, two.`orderby`
+    </select>
+
 </mapper>

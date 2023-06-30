@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author itcast
  */
+@Repository
 public interface TeachplanMediaMapper extends BaseMapper<TeachplanMedia> {
 
 }

@@ -82,3 +82,12 @@ Content-Type: application/json
 ### 课程计划查询
 GET {{content_host}}/content/teachplan/117/tree-nodes
 
+
+### 删除课程计划
+DELETE {{content_host}}/content/teachplan/299
+
+#如果失败返回：
+#{"errCode":"120409","errMessage":"课程计划信息还有子级信息，无法操作"}
+#
+#如果成功：状态码200，不返回信息
+
