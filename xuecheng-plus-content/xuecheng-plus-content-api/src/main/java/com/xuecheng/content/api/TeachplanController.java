@@ -50,5 +50,4 @@ public class TeachplanController {
     public void moveDownTeachPlan(@PathVariable Long id) {
         teachplanService.moveDownTeachPlan(id);
     }
-
 }

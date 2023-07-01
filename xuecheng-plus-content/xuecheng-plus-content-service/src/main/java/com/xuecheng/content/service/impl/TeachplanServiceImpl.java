@@ -152,6 +152,7 @@ public class TeachplanServiceImpl implements TeachplanService {
         teachplanMapper.updateById(currentOrderNode);
     }
 
+
     /**
      * 查询当前章节id下是否有子章节
      * @param id 章节id

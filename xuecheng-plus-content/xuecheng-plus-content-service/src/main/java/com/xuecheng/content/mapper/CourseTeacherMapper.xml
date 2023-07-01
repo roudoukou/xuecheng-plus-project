@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress SqlResolve -->
 <mapper namespace="com.xuecheng.content.mapper.CourseTeacherMapper">
 
     <!-- 通用查询映射结果 -->
@@ -17,5 +18,53 @@
     <sql id="Base_Column_List">
         id, course_id, teacher_name, position, introduction, photograph, create_date
     </sql>
+
+    <select id="getCourseTeacherList" resultType="com.xuecheng.content.model.po.CourseTeacher">
+        select <include refid="Base_Column_List"/>
+        from course_teacher
+        where course_id = #{courseId}
+    </select>
+
+    <!--Integer addCourseTeacher(CourseTeacher courseTeacher);-->
+    <insert id="addCourseTeacher" useGeneratedKeys="true" keyProperty="id">
+        insert into course_teacher(course_id,
+                                   teacher_name,
+                                   position,
+                                   introduction,
+                                   photograph,
+                                   create_date)
+        values(#{courseId},
+               #{teacherName},
+               #{position},
+               #{introduction},
+               #{photograph},
+               #{createDate})
+    </insert>
+    
+<!--    <select id="selectCourseTeacherByCourseId" resultType="com.xuecheng.content.model.po.CourseTeacher">
+        select <include refid="Base_Column_List"/>
+        from course_teacher
+        where course_id = #{courseId}
+    </select>-->
+
+    <!--Integer updateCourseTeacher(CourseTeacher courseTeacher);-->
+    <update id="updateCourseTeacher">
+        update course_teacher
+        set course_id = #{courseId},
+            teacher_name = #{teacherName},
+            position = #{position},
+            introduction = #{introduction},
+            photograph = #{photograph},
+            create_date = #{createDate}
+        where id = #{id}
+    </update>
+
+    <!--Integer deleteCourseTeacher(Long courseId, Long id);-->
+    <delete id="deleteCourseTeacher">
+        delete from course_teacher
+        where course_id = #{param1}
+        and id = #{param2}
+    </delete>
+
 
 </mapper>
