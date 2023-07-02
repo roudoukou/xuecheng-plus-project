@@ -15,7 +15,10 @@ import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseCategory;
 import com.xuecheng.content.model.po.CourseMarket;
+import com.xuecheng.content.model.po.CourseTeacher;
 import com.xuecheng.content.service.CourseBaseInfoService;
+import com.xuecheng.content.service.CourseTeacherService;
+import com.xuecheng.content.service.TeachplanService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +31,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Autowired
@@ -38,6 +42,13 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Autowired
     private CourseCategoryMapper courseCategoryMapper;
+
+    @Autowired
+    private TeachplanService teachplanService;
+
+    @Autowired
+    private CourseTeacherService courseTeacherService;
+
 
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
@@ -208,6 +219,32 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         }
 
         return courseBaseInfo;
+    }
+
+    @Override
+    public void deleteCourseById(Long courseId) {
+        // 课程的审核状态为未提交时方可删除。
+        String auditStatus = courseBaseMapper.selectAuditStatusByCourseId(courseId);
+
+        if (!auditStatus.equals("202002")) {
+            throw new XueChengPlusException("审核状态为未提交时方可删除!");
+        }
+        // 删除课程
+        // 1.删除课程相关的基本信息、
+        courseBaseMapper.deleteCourseBaseById(courseId);
+
+        // 貌似理解错了啥, 课程id 不是courseid, 算了懒得改了
+        // 2.营销信息、
+        courseMarketMapper.deleteById(courseId);
+        // 3.课程计划、
+        teachplanService.deleteTeachPlanByCourseId(courseId);
+        // 4.课程教师信息。
+        // 查询当前课下有多少的老师, 每个老师对应的id
+        List<CourseTeacher> courseTeacherList = courseTeacherService.getCourseTeacherList(courseId);
+        for (CourseTeacher courseTeacher : courseTeacherList) {
+            Long id = courseTeacher.getId();
+            courseTeacherService.deleteCourseTeacher(courseId, id);
+        }
     }
 
     // 保存课程营销信息

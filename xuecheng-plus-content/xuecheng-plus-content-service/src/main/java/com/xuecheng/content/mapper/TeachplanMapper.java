@@ -27,4 +27,7 @@ public interface TeachplanMapper extends BaseMapper<Teachplan> {
     Teachplan getLastOrderNode(@Param("orderby") Integer orderby, @Param("id") Long id);
 
     Teachplan getNextOrderNode(@Param("orderby") Integer orderby, @Param("id") Long id);
+
+    Integer deleteTeachPlanByCourseId(Long courseId);
+
 }

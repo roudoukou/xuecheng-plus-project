@@ -50,6 +50,7 @@
             <result column="two_orderby" property="orderby"/>
             <result column="two_courseId" property="courseId"/>
             <result column="two_coursePubId" property="coursePubId"/>
+            <result column="two_isPreview" property="isPreview"/>
             <!-- 一对一映射 -->
             <association property="teachplanMedia" javaType="com.xuecheng.content.model.po.TeachplanMedia">
                 <result column="teachplanMeidaId"   property="id" />
@@ -73,6 +74,7 @@
                one.orderby       one_orderby,
                one.course_id     one_courseId,
                one.course_pub_id one_coursePubId,
+               one.is_preview    one_isPreview,
                two.id            two_id,
                two.pname         two_pname,
                two.parentid      two_parentid,
@@ -83,6 +85,7 @@
                two.orderby       two_orderby,
                two.course_id     two_courseId,
                two.course_pub_id two_coursePubId,
+               two.is_preview    two_isPreview,
                tm.media_fileName mediaFilename,
                tm.id             teachplanMeidaId,
                tm.media_id       mediaId
@@ -180,5 +183,11 @@
         )
         LIMIT 1
         ;*/-->
+
+    <!--Integer deleteTeachPlanByCourseId(Long courseId);-->
+    <delete id="deleteTeachPlanByCourseId" parameterType="java.lang.Long">
+        delete from xc402_content.teachplan
+        where course_id = #{courseId}
+    </delete>
 
 </mapper>

@@ -27,4 +27,11 @@ public interface DictionaryService extends IService<Dictionary> {
      * @return
      */
     Dictionary getByCode(String code);
+
+    /**
+     * 根据dictionary查询code
+     * @param desc 字典
+     * @return 相应的code
+     */
+    String getCodeByDictionary(String desc);
 }

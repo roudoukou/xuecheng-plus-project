@@ -23,9 +23,15 @@ public interface TeachplanService {
      */
     void saveTeachplan(@RequestBody SaveTeachplanDto saveTeachplanDto);
 
-    void deleteTeachPlan(Long courseId);
+    void deleteTeachPlan(Long id);
 
     void moveUpTeachPlan(Long id);
 
     void moveDownTeachPlan(Long id);
+
+    /**
+     * 通过课程id删除当前所有的教学计划
+     * @param courseId 传入一个课程id
+     */
+    void deleteTeachPlanByCourseId(Long courseId);
 }

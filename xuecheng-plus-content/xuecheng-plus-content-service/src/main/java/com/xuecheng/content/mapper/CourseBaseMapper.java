@@ -14,4 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseBaseMapper extends BaseMapper<CourseBase> {
 
+    String selectAuditStatusByCourseId(Long courseId);
+
+    Integer deleteCourseBaseById(Long courseId);
 }

@@ -33,4 +33,9 @@ public class DictionaryController  {
     public Dictionary getByCode(@PathVariable String code) {
         return dictionaryService.getByCode(code);
     }
+
+    @GetMapping("/dictionary/{desc}")
+    public String getCodeByDesc(@PathVariable String desc) {
+        return dictionaryService.getCodeByDictionary(desc);
+    }
 }

@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseMarketMapper extends BaseMapper<CourseMarket> {
 
+    Integer deleteById(Long courseId);
 }

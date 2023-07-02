@@ -152,6 +152,11 @@ public class TeachplanServiceImpl implements TeachplanService {
         teachplanMapper.updateById(currentOrderNode);
     }
 
+    @Override
+    public void deleteTeachPlanByCourseId(Long courseId) {
+        teachplanMapper.deleteTeachPlanByCourseId(courseId);
+    }
+
 
     /**
      * 查询当前章节id下是否有子章节
