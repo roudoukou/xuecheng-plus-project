@@ -128,8 +128,19 @@ Content-Type: application/json
 ### 删除教师
 DELETE {{content_host}}/courseTeacher/content/course/75/31
 
-
 delete  /course/87
 87为课程id
 请求参数：课程id
 响应：状态码200，不返回信息
+
+
+### 删除课程接口
+DELETE {{content_host}}/content/course/75
+
+# 删除课程基本信息, 课程营销信息, 课程计划, 课程计划关联信息, 课程师资
+
+
+
+### 通过字典查code
+GET http://localhost:63110/system/dictionary/未审核
+
