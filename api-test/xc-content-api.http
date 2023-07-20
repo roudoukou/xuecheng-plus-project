@@ -146,3 +146,13 @@ DELETE {{content_host}}/content/course/75
 ### 通过字典查code
 GET http://localhost:63110/system/dictionary/未审核
 
+
+### 上传文件
+POST {{media_host}}/media/upload/coursefile
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="filedata"; filename="1.jpg"
+Content-Type: application/octet-stream
+
+< E:/Image/1670049709213.jpg
