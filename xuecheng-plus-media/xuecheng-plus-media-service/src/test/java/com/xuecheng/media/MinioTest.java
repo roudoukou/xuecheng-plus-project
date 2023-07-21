@@ -13,6 +13,10 @@ import org.springframework.http.MediaType;
 import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 测试minio的sdk
@@ -92,5 +96,60 @@ public class MinioTest {
             e.printStackTrace();
         }
     }
+
+    // 将分块文件上传到minio
+    @Test
+    public void uploadChunk() throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
+
+        for (int i = 0; i < 15; i++) {
+
+            File file = new File("E:\\Video\\这么可爱真实抱歉\\chunk\\" + i);
+            // 上传文件的参数信息
+            UploadObjectArgs uploadObjectArgs = UploadObjectArgs
+                    .builder()
+                    .bucket("testbucket")
+                    .filename(file.getPath())
+                    .object("chunk/" + i)
+                    .build();
+            minioClient.uploadObject(uploadObjectArgs);
+            System.out.println("文件分块" + i + "上传成功! ");
+        }
+    }
+
+    // 调用minio接口合并分块
+    @Test
+    public void Merge() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        List<ComposeSource> sources = new ArrayList<>();
+
+        for (int i = 0; i < 15; i++) {
+            // 指定分块文件的信息
+            ComposeSource composeSource = ComposeSource
+                    .builder()
+                    .bucket("testbucket")
+                    .object("chunk/" + i)
+                    .build();
+            sources.add(composeSource);
+        }
+
+        /*List<ComposeSource> sources = Stream.iterate(0, i -> ++i).limit(15).map(
+                i -> ComposeSource
+                        .builder()
+                        .bucket("testbucket")
+                        .object("chunk/" + i)
+                        .build()
+        ).collect(Collectors.toList());*/
+
+        ComposeObjectArgs composeObjectArgs = ComposeObjectArgs
+                .builder()
+                .bucket("testbucket")
+                .object("这么可爱真是抱歉.mp4")
+                .sources(sources)
+                .build();
+        // 合并文件, minio默认的分块文件大小是5M
+        minioClient.composeObject(composeObjectArgs);
+    }
+
+    // 批量清理分块文件
 
 }

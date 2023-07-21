@@ -22,7 +22,7 @@ public class BigFileTest {
         // 分块文件存储路径
         String chunkFilePath = "E:\\Video\\这么可爱真实抱歉\\chunk\\";
         // 分块文件大小
-        int chunkSize = 1024 * 1024 * 1; // 1 MB = 1024 KB = 1024 * 1024 字节 B
+        int chunkSize = 1024 * 1024 * 5; // 1 MB = 1024 KB = 1024 * 1024 字节 B
         // 分块文件个数
         int chunkNum = (int) Math.ceil(sourFile.length() * 1.0 / chunkSize);
         // 使用流从源文件读数据, 向分块文件中写数据
