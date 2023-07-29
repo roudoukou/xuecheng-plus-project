@@ -59,6 +59,8 @@ public class SampleXxlJob {
         // 分片参数
         int shardIndex = XxlJobHelper.getShardIndex();
         int shardTotal = XxlJobHelper.getShardTotal();
+        System.out.println("shardIndex = " + shardIndex);
+        System.out.println("shardTotal = " + shardTotal);
 
         XxlJobHelper.log("分片参数：当前分片序号 = {}, 总分片数 = {}", shardIndex, shardTotal);
 
