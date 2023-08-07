@@ -448,28 +448,17 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @param chunkTotal 分块文件总数
      */
     private void clearChunkFiles(String chunkFileFolderPath,int chunkTotal){
-
-        try {
-            List<DeleteObject> deleteObjects = Stream.iterate(0, i -> ++i)
-                    .limit(chunkTotal)
-                    .map(i -> new DeleteObject(chunkFileFolderPath.concat(Integer.toString(i))))
-                    .collect(Collectors.toList());
-
-            RemoveObjectsArgs removeObjectsArgs = RemoveObjectsArgs.builder().bucket("video").objects(deleteObjects).build();
-            Iterable<Result<DeleteError>> results = minioClient.removeObjects(removeObjectsArgs);
-            results.forEach(r->{
-                DeleteError deleteError = null;
-                try {
-                    deleteError = r.get();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("清楚分块文件失败,objectname:{}",deleteError.objectName(),e);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("清楚分块文件失败,chunkFileFolderPath:{}",chunkFileFolderPath,e);
-        }
+        Iterable<DeleteObject> objects =  Stream.iterate(0, i -> ++i).limit(chunkTotal).map(i -> new DeleteObject(chunkFileFolderPath+ i)).collect(Collectors.toList());;
+        RemoveObjectsArgs removeObjectsArgs = RemoveObjectsArgs.builder().bucket(bucket_video).objects(objects).build();
+        Iterable<Result<DeleteError>> results = minioClient.removeObjects(removeObjectsArgs);
+        //要想真正删除
+        results.forEach(f->{
+            try {
+                DeleteError deleteError = f.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 

@@ -31,7 +31,7 @@ public class MediaFileProcessServiceImpl implements MediaFileProcessService {
     @Override
     public List<MediaProcess> getMediaProcessList(int shardIndex, int shardTotal, int count) {
         List<MediaProcess> mediaProcesses =
-                mediaProcessMapper.selectListByShardIndex(shardIndex, shardTotal, count);
+                mediaProcessMapper.selectListByShardIndex(shardTotal, shardIndex, count);
         return mediaProcesses;
     }
 

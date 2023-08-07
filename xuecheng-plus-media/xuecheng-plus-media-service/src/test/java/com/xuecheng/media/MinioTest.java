@@ -152,4 +152,22 @@ public class MinioTest {
 
     // 批量清理分块文件
 
+    @Test
+    public void getVideo() {
+        GetObjectArgs getObjectArgs =
+                GetObjectArgs.builder()
+                        .bucket("video")
+                        .object("d/f/df7ca1ff0445cb4fb93f6ccdc1e5bb18/df7ca1ff0445cb4fb93f6ccdc1e5bb18.avi")
+                        .build();
+        try {
+            FilterInputStream inputStream = minioClient.getObject(getObjectArgs);
+            FileOutputStream outputStream
+                    = new FileOutputStream(new File("E:\\Code\\学成在线\\ffmpeg\\新建文件夹\\df7ca1ff0445cb4fb93f6ccdc1e5bb18.avi"));
+            inputStream.close();
+            outputStream.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
