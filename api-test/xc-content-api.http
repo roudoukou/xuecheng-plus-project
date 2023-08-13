@@ -1,7 +1,9 @@
 ### 查询课程信息
 #POST {{content_host}}/content/course/list?pageNo=1&pageSize=2
 # 通过网关查询课程信息
+# 当此微服务
 POST {{gateway_host}}/content/course/list?pageNo=1&pageSize=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2OTE5NDMyMTEsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6Ijk4ZTUyMTkwLTUwNmUtNGQ4My04NjM0LWNlMGVhYjA5ZmUyMiIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.qJ8hPG4KYJzGgav9LAPvBN4jXIbmppzIKpy28zR6k14
 Content-Type: application/json
 
 {
@@ -9,6 +11,13 @@ Content-Type: application/json
   "courseName": "java",
   "publishStatus": ""
 }
+
+
+
+// {
+//"error": "unauthorized",
+//"error_description": "Full authentication is required to access this resource"
+//}
 
 ### 创建课程
 POST {{content_host}}/content/course

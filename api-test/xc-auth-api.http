@@ -21,7 +21,7 @@ POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&gr
 #}
 
 
-### 密码模式
+### 密码模式(普通加密)
 POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
 #{
 #  "access_token": "955e450b-5979-40db-8c3c-9e76bd121464",
@@ -32,3 +32,21 @@ POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&gr
 #}
 
 
+### 密码模式(jwt加密)
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+
+#{
+#  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2OTE5NDExNTUsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjI5NDUwOGZiLTljYmEtNDAxZS1iMDNhLTRjYzFjYmFiZTBhNiIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.Tv7RHqTU9gMChfwjcx1IKxogB9hse9eJL9mYU74bCEU",
+#  "token_type": "bearer",
+#  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJhdGkiOiIyOTQ1MDhmYi05Y2JhLTQwMWUtYjAzYS00Y2MxY2JhYmUwYTYiLCJleHAiOjE2OTIxOTMxNTUsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjdhMmEyYzU4LWZjMDEtNGQwNS05NDc2LTQ5NDM2ODU2N2NhOSIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0._wqalLITzirfbyoNQt-1tvXEGL9d01x85Bq1F-AjHlU",
+#  "expires_in": 7199,
+#  "scope": "all",
+#  "jti": "294508fb-9cba-401e-b03a-4cc1cbabe0a6"
+#}
+#Response file saved.
+#> 2023-08-13T213916.200.json
+#
+#Response code: 200; Time: 2223ms (2 s 223 ms); Content length: 813 bytes (813 B)
+
+###校验jwt令牌
+POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2OTE5NDExNTUsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjI5NDUwOGZiLTljYmEtNDAxZS1iMDNhLTRjYzFjYmFiZTBhNiIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.Tv7RHqTU9gMChfwjcx1IKxogB9hse9eJL9mYU74bCEU
