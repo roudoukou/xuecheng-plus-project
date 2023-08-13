@@ -1,0 +1,34 @@
+
+###
+GET {{auth_host}}/auth/oauth/authorize?client_id=XcWebApp&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
+
+### 获取code
+GET http://localhost:63070/auth/oauth/authorize?client_id=XcWebApp&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
+
+# http://www.51xuecheng.cn/?code=1O5xYl
+
+### 授权码模式
+### 第一步申请授权码(浏览器请求)/oauth/authorize?client_id=c1&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
+### 第二步申请令牌
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=UqBmZ1&redirect_uri=http://www.51xuecheng.cn
+
+#{
+#  "access_token": "955e450b-5979-40db-8c3c-9e76bd121464",
+#  "token_type": "bearer",
+#  "refresh_token": "e55ecd5f-2e1b-40db-ab37-47d1eb21963a",
+#  "expires_in": 7161,
+#  "scope": "all"
+#}
+
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+#{
+#  "access_token": "955e450b-5979-40db-8c3c-9e76bd121464",
+#  "token_type": "bearer",
+#  "refresh_token": "e55ecd5f-2e1b-40db-ab37-47d1eb21963a",
+#  "expires_in": 7099,
+#  "scope": "all"
+#}
+
+
