@@ -68,7 +68,7 @@ public class FreemarkerTest {
         //将静态化内容输出到文件中
         InputStream inputStream = IOUtils.toInputStream(content);
         //输出流
-        FileOutputStream outputStream = new FileOutputStream("E:\\Code\\学成在线\\test.html");
+        FileOutputStream outputStream = new FileOutputStream("E:\\Code\\学成在线\\120.html");
         IOUtils.copy(inputStream, outputStream);
 
     }
