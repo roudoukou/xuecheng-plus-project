@@ -48,5 +48,26 @@ POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&gr
 #
 #Response code: 200; Time: 2223ms (2 s 223 ms); Content length: 813 bytes (813 B)
 
-###校验jwt令牌
+### 校验jwt令牌
 POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2OTE5NDExNTUsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjI5NDUwOGZiLTljYmEtNDAxZS1iMDNhLTRjYzFjYmFiZTBhNiIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.Tv7RHqTU9gMChfwjcx1IKxogB9hse9eJL9mYU74bCEU
+
+#{
+#  "aud": [
+#    "xuecheng-plus"
+#  ],
+#  "user_name": "zhangsan",
+#  "scope": [
+#    "all"
+#  ],
+#  "active": true,
+#  "exp": 1691941155,
+#  "authorities": [
+#    "p1"
+#  ],
+#  "jti": "294508fb-9cba-401e-b03a-4cc1cbabe0a6",
+#  "client_id": "XcWebApp"
+#}
+#Response file saved.
+#> 2023-08-13T222412.200.json
+#
+#Response code: 200; Time: 58ms (58 ms); Content length: 184 bytes (184 B)
