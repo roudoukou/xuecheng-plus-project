@@ -1,5 +1,6 @@
 package com.xuecheng.ucenter.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xuecheng.ucenter.mapper.XcUserMapper;
 import com.xuecheng.ucenter.model.po.XcUser;
@@ -33,13 +34,17 @@ public class UserServiceImpl implements UserDetailsService {
         if (xcUser == null) {
             return null;
         }
+
         // 如果查到了用户拿到正确的密码, 最终封装成一个UserDetails对象的Spring Security框架返回, 由框架进行密码比对
         String password = xcUser.getPassword();
+
+        xcUser.setPassword("");
+        String userJSONString = JSON.toJSONString(xcUser);
 
         // 权限
         String[] authorities = {"test"};
 
-        UserDetails userDetails = User.withUsername(username).password(password).authorities(authorities).build();
+        UserDetails userDetails = User.withUsername(userJSONString).password(password).authorities(authorities).build();
         return userDetails;
     }
 }
