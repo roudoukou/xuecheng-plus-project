@@ -2,6 +2,7 @@ package com.xuecheng.ucenter.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xuecheng.ucenter.model.po.XcUser;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -10,6 +11,7 @@ import com.xuecheng.ucenter.model.po.XcUser;
  *
  * @author itcast
  */
+@Repository
 public interface XcUserMapper extends BaseMapper<XcUser> {
 
 }

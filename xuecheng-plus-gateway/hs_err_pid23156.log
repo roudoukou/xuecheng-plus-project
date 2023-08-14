@@ -1,0 +1,182 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 32744 bytes for ChunkPool::allocate
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:273), pid=23156, tid=0x0000000000002160
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_141-b15) (build 1.8.0_141-b15)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.141-b15 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000001e1f9000):  JavaThread "C1 CompilerThread3" daemon [_thread_in_native, id=8544, stack(0x000000001eb70000,0x000000001ec70000)]
+
+Stack: [0x000000001eb70000,0x000000001ec70000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+Current CompileTask:
+C1:    677  110       3       java.util.zip.ZipCoder::getBytes (192 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000000001e1ff000 JavaThread "Service Thread" daemon [_thread_blocked, id=27676, stack(0x000000001ec70000,0x000000001ed70000)]
+=>0x000000001e1f9000 JavaThread "C1 CompilerThread3" daemon [_thread_in_native, id=8544, stack(0x000000001eb70000,0x000000001ec70000)]
+  0x000000001e1f1800 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=8708, stack(0x000000001ea70000,0x000000001eb70000)]
+  0x000000001e148000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=17636, stack(0x000000001e970000,0x000000001ea70000)]
+  0x000000001e144000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=1100, stack(0x000000001e870000,0x000000001e970000)]
+  0x000000001e1a2800 JavaThread "Attach Listener" daemon [_thread_blocked, id=20824, stack(0x000000001e770000,0x000000001e870000)]
+  0x000000001c24e800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=23856, stack(0x000000001e670000,0x000000001e770000)]
+  0x00000000028a8000 JavaThread "Finalizer" daemon [_thread_blocked, id=27816, stack(0x000000001e510000,0x000000001e610000)]
+  0x000000001c23d800 JavaThread "Reference Handler" daemon [_thread_blocked, id=17028, stack(0x000000001e010000,0x000000001e110000)]
+  0x0000000000aed800 JavaThread "main" [_thread_in_Java, id=26528, stack(0x00000000026b0000,0x00000000027b0000)]
+
+Other Threads:
+  0x000000001c239800 VMThread [stack: 0x000000001df10000,0x000000001e010000] [id=9260]
+  0x000000001e296800 WatcherThread [stack: 0x000000001ed70000,0x000000001ee70000] [id=19248]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 75776K, used 3901K [0x000000076b900000, 0x0000000770d80000, 0x00000007c0000000)
+  eden space 65024K, 6% used [0x000000076b900000,0x000000076bccf5e0,0x000000076f880000)
+  from space 10752K, 0% used [0x0000000770300000,0x0000000770300000,0x0000000770d80000)
+  to   space 10752K, 0% used [0x000000076f880000,0x000000076f880000,0x0000000770300000)
+ ParOldGen       total 173568K, used 0K [0x00000006c2a00000, 0x00000006cd380000, 0x000000076b900000)
+  object space 173568K, 0% used [0x00000006c2a00000,0x00000006c2a00000,0x00000006cd380000)
+ Metaspace       used 3345K, capacity 4672K, committed 4864K, reserved 1056768K
+  class space    used 359K, capacity 428K, committed 512K, reserved 1048576K
+
+Card table byte_map: [0x0000000011c70000,0x0000000012460000] byte_map_base: 0x000000000e65b000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000059d2d850
+ Begin Bits: [0x00000000131b0000, 0x0000000017108000)
+ End Bits:   [0x0000000017108000, 0x000000001b060000)
+
+Polling page: 0x0000000000ab0000
+
+CodeCache: size=245760Kb used=1266Kb max_used=1278Kb free=244493Kb
+ bounds [0x00000000028b0000, 0x0000000002b20000, 0x00000000118b0000]
+ total_blobs=356 nmethods=109 adapters=160
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 0.662 Thread 0x000000001e1f1800  105  s    4       java.lang.StringBuffer::append (13 bytes)
+Event: 0.663 Thread 0x000000001e1f9000  106  s    3       java.lang.StringBuffer::toString (36 bytes)
+Event: 0.664 Thread 0x000000001e1f9000 nmethod 106 0x00000000029ea050 code [0x00000000029ea1e0, 0x00000000029ea688]
+Event: 0.664 Thread 0x000000001e1f9000  107       3       java.nio.Buffer::checkIndex (22 bytes)
+Event: 0.669 Thread 0x000000001e1f9000 nmethod 107 0x00000000029ec050 code [0x00000000029ec1c0, 0x00000000029ec408]
+Event: 0.669 Thread 0x000000001e1f9000  108       3       java.nio.DirectLongBufferU::ix (10 bytes)
+Event: 0.670 Thread 0x000000001e1f9000 nmethod 108 0x00000000029ebd10 code [0x00000000029ebe60, 0x00000000029ebfd0]
+Event: 0.674 Thread 0x000000001e1f9000  109       3       java.util.zip.ZipFile::ensureOpen (37 bytes)
+Event: 0.675 Thread 0x000000001e1f9000 nmethod 109 0x00000000029eb690 code [0x00000000029eb820, 0x00000000029ebb98]
+Event: 0.675 Thread 0x000000001e1f9000  110       3       java.util.zip.ZipCoder::getBytes (192 bytes)
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (2 events):
+Event: 0.070 Thread 0x0000000000aed800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.defineClass(Ljava/lang/String;[BII)Ljava/lang/Class; name or signature does not match> (0x000000076b907ca8) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u141\9370\hotspot\
+Event: 0.070 Thread 0x0000000000aed800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V name or signature does not match> (0x000000076b907f90) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u141\9370\hotspot\src\share\vm\prims
+
+Events (10 events):
+Event: 0.624 loading class org/apache/maven/cli/MavenCli$ExitException
+Event: 0.624 loading class org/apache/maven/cli/MavenCli$ExitException done
+Event: 0.626 loading class org/eclipse/aether/transfer/TransferListener
+Event: 0.626 loading class org/eclipse/aether/transfer/TransferListener done
+Event: 0.647 loading class org/apache/maven/execution/ExecutionListener
+Event: 0.647 loading class org/apache/maven/execution/ExecutionListener done
+Event: 0.648 loading class java/lang/IllegalStateException
+Event: 0.648 loading class java/lang/IllegalStateException done
+Event: 0.649 loading class org/codehaus/plexus/PlexusContainer
+Event: 0.649 loading class org/codehaus/plexus/PlexusContainer done
+
+
+Dynamic libraries:
+0x00007ff73fd70000 - 0x00007ff73fda7000 	D:\java\jdk1.8.0_141\bin\java.exe
+0x00007ff9ea5d0000 - 0x00007ff9ea7c8000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff9e9410000 - 0x00007ff9e94cf000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff9e8110000 - 0x00007ff9e8406000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff9ea4b0000 - 0x00007ff9ea55f000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff9e9370000 - 0x00007ff9e940e000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff9e9930000 - 0x00007ff9e99cc000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff9e8bf0000 - 0x00007ff9e8d16000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff9e8a40000 - 0x00007ff9e8bdd000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff9e7cb0000 - 0x00007ff9e7cd2000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff9e99d0000 - 0x00007ff9e99fc000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff9e8410000 - 0x00007ff9e8525000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff9e7f70000 - 0x00007ff9e800d000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff9e8010000 - 0x00007ff9e8110000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff9d24c0000 - 0x00007ff9d275a000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.1110_none_60b5254171f9507e\COMCTL32.dll
+0x00007ff9ea560000 - 0x00007ff9ea590000 	C:\WINDOWS\System32\IMM32.DLL
+0x0000000059db0000 - 0x0000000059e82000 	D:\java\jdk1.8.0_141\jre\bin\msvcr100.dll
+0x0000000059510000 - 0x0000000059dad000 	D:\java\jdk1.8.0_141\jre\bin\server\jvm.dll
+0x00007ff9e8be0000 - 0x00007ff9e8be8000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ff9e1550000 - 0x00007ff9e1559000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ff9e94d0000 - 0x00007ff9e953b000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff9cd600000 - 0x00007ff9cd627000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff9d4900000 - 0x00007ff9d490a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x0000000059500000 - 0x000000005950f000 	D:\java\jdk1.8.0_141\jre\bin\verify.dll
+0x00000000594d0000 - 0x00000000594f9000 	D:\java\jdk1.8.0_141\jre\bin\java.dll
+0x00000000592f0000 - 0x0000000059306000 	D:\java\jdk1.8.0_141\jre\bin\zip.dll
+0x00007ff9e9a00000 - 0x00007ff9ea144000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007ff9e5d60000 - 0x00007ff9e64f3000 	C:\WINDOWS\SYSTEM32\windows.storage.dll
+0x00007ff9ea150000 - 0x00007ff9ea4a4000 	C:\WINDOWS\System32\combase.dll
+0x00007ff9e7700000 - 0x00007ff9e772e000 	C:\WINDOWS\SYSTEM32\Wldp.dll
+0x00007ff9e97a0000 - 0x00007ff9e984d000 	C:\WINDOWS\System32\SHCORE.dll
+0x00007ff9e8d20000 - 0x00007ff9e8d75000 	C:\WINDOWS\System32\shlwapi.dll
+0x00007ff9e7bf0000 - 0x00007ff9e7c0f000 	C:\WINDOWS\SYSTEM32\profapi.dll
+
+VM Arguments:
+jvm_args: -Dmaven.multiModuleProjectDirectory=E:\Code\学成在线\xuecheng-plus-project\xuecheng-plus-gateway -Djansi.passthrough=true -Dmaven.home=D:\Maven\apache-maven-3.5.4 -Dclassworlds.conf=D:\Maven\apache-maven-3.5.4\bin\m2.conf -Dmaven.ext.class.path=D:\IDEA\IntelliJ IDEA 2023.1.3\plugins\maven\lib\maven-event-listener.jar -Dfile.encoding=UTF-8 
+java_command: org.codehaus.classworlds.Launcher -Didea.version=2023.1.3 -s D:\Maven\apache-maven-3.5.4\conf\settings.xml -Dmaven.repo.local=D:\Maven\maven-repo install --non-recursive
+java_class_path (initial): D:\Maven\apache-maven-3.5.4\boot\plexus-classworlds-2.5.2.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=D:\java\jdk1.8.0_141
+CLASSPATH=.;D:\java\jdk1.8.0_141\lib\dt.jar;D:\java\jdk1.8.0_141\lib\tools.jar;
+PATH=C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Windows;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\Maven\apache-maven-3.5.4\bin;D:\java\jdk1.8.0_141\bin;D:\java\jdk1.8.0_141\jre\bin;D:\VMware\bin\;D:\mingw\MinGW\bin;D:\Git\cmd;D:\MySQL\MySQL Server 8.0\Program Files\bin;D:\XShell\Xshell 7\;D:\Xftp\Xftp 7\;D:\wechat_devtool\微信web开发者工具\dll;D:\Nodejs\;D:\scala\bin;D:\wechat_devtools\微信web开发者工具\dll;D:\hadoop-3.1.0\bin;D:\MongoDB\Server\5.0\bin;D:\Python\Scripts\;D:\Python\;C:\Users\肉豆蔻吖\AppData\Local\Microsoft\WindowsApps;D:\Visual Studio Code\Visual Studio Code\Microsoft VS Code\bin;D:\Nodejs\node_global;;D:\IDEA\IntelliJ IDEA 2021.3.3\bin;;D:\mitmproxy\mitmproxy\bin;D:\CLion\CLion 2021.3.4\bin;;C:\Users\肉豆蔻吖\AppData\Roaming\npm
+USERNAME=肉豆蔻吖
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 19041 (10.0.19041.3031)
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 142 stepping 12, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16601588k(1829048k free), swap 32068456k(812k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.141-b15) for windows-amd64 JRE (1.8.0_141-b15), built on Jul 12 2017 04:25:12 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Mon Aug 14 14:22:15 2023
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

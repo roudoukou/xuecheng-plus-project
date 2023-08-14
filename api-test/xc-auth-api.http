@@ -71,3 +71,7 @@ POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX
 #> 2023-08-13T222412.200.json
 #
 #Response code: 200; Time: 58ms (58 ms); Content length: 184 bytes (184 B)
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=stu1&password=111111
+
