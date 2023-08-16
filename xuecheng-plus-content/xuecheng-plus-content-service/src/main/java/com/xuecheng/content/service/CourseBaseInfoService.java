@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * 课程基本信息管理业务接口
  */
 public interface CourseBaseInfoService {
-    PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
+    PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
 
     /**
      * 添加课程基本信息

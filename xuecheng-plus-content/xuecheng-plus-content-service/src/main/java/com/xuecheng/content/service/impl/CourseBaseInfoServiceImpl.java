@@ -51,7 +51,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
 
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
 
         // 凭借查询条件
         LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
@@ -64,6 +64,9 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
         // 根据课程审核状态查询course_base.audit_status = ?
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getAuditStatus()), CourseBase::getAuditStatus, courseParamsDto.getAuditStatus());
+
+        //机构id
+        queryWrapper.eq(CourseBase::getCompanyId,companyId);
 
 
         // 创建page分页参数对象, 参数: 当前页码, 每页记录数
