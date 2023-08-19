@@ -82,7 +82,8 @@
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>3.7.73.ALL</version>
+            <!--<version>3.7.73.ALL</version>-->
+            <version>4.38.55.ALL</version>
         </dependency>
 
         <!-- 支付宝SDK依赖的日志 -->
