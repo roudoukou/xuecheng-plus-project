@@ -2,6 +2,7 @@ package com.xuecheng.orders.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xuecheng.orders.model.po.XcOrders;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -10,6 +11,7 @@ import com.xuecheng.orders.model.po.XcOrders;
  *
  * @author itcast
  */
+@Repository
 public interface XcOrdersMapper extends BaseMapper<XcOrders> {
 
 }
