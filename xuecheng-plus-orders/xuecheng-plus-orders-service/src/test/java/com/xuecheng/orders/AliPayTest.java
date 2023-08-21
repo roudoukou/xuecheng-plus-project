@@ -65,13 +65,14 @@ public class AliPayTest {
         alipayConfig.setAlipayPublicKey(alipayPublicKey);
         alipayConfig.setCharset("UTF8");
         alipayConfig.setSignType("RSA2");
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig);
+        // AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig);
 
-        // AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL, APP_ID, APP_PRIVATE_KEY, "json", AlipayConfig.CHARSET, ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE); //获得初始化的AlipayClient
+        AlipayClient alipayClient = new DefaultAlipayClient(com.xuecheng.orders.config.AlipayConfig.URL, APP_ID, APP_PRIVATE_KEY, "json", com.xuecheng.orders.config.AlipayConfig.CHARSET, ALIPAY_PUBLIC_KEY, com.xuecheng.orders.config.AlipayConfig.SIGNTYPE); //获得初始化的AlipayClient
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         AlipayTradeQueryModel model = new AlipayTradeQueryModel();
-        model.setOutTradeNo("202308100010102999");
-        model.setTradeNo("2023081922001461290500680974");
+        // model.setOutTradeNo("202308100010102999");
+        model.setOutTradeNo("1693634061534363648");
+        // model.setTradeNo("2023081922001461290500680974");
         request.setBizModel(model);
         AlipayTradeQueryResponse response = alipayClient.execute(request);
         System.out.println(response.getBody());
