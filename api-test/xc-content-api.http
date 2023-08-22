@@ -166,3 +166,7 @@ Content-Disposition: form-data; name="filedata"; filename="1.jpg"
 Content-Type: application/octet-stream
 
 < E:/Image/1670049709213.jpg
+
+
+### 测试contnet
+POST {{content_host}}/content/coursepublish/2
