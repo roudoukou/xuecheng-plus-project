@@ -45,6 +45,9 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
     @Autowired
     MyCourseTablesServiceImpl currentProxy;
 
+    @Autowired
+    XcChooseCourseMapper chooseCourseMapper;
+
     @Transactional
     @Override
     public XcChooseCourseDto addChooseCourse(String userId, Long courseId) {
@@ -104,6 +107,36 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
             return xcCourseTablesDto;
         }
 
+    }
+
+    @Override
+    public boolean saveChooseCourseSuccess(String chooseCourseId) {
+
+        //根据选课id查询选课表
+        XcChooseCourse chooseCourse = chooseCourseMapper.selectById(chooseCourseId);
+        if(chooseCourse == null){
+            log.debug("接收购买课程的消息，根据选课id从数据库找不到选课记录,选课id:{}",chooseCourseId);
+            return false;
+        }
+        //选课状态
+        String status = chooseCourse.getStatus();
+        //只有当未支付时才更新为已支付
+        if("701002".equals(status)){
+            //更新选课记录的状态为支付成功
+            chooseCourse.setStatus("701001");
+            int i = chooseCourseMapper.updateById(chooseCourse);
+            if(i<=0){
+                log.debug("添加选课记录失败:{}",chooseCourse);
+                XueChengPlusException.cast("添加选课记录失败");
+            }
+
+            //向我的课程表插入记录
+            XcCourseTables xcCourseTables = addCourseTabls(chooseCourse);
+            return true;
+        }
+
+
+        return false;
     }
 
 

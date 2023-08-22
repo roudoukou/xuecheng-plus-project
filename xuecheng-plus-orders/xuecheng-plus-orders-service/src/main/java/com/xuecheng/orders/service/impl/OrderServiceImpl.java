@@ -12,7 +12,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xuecheng.base.execption.XueChengPlusException;
 import com.xuecheng.base.utils.IdWorkerUtils;
 import com.xuecheng.base.utils.QRCodeUtil;
+import com.xuecheng.messagesdk.model.po.MqMessage;
+import com.xuecheng.messagesdk.service.MqMessageService;
 import com.xuecheng.orders.config.AlipayConfig;
+import com.xuecheng.orders.config.PayNotifyConfig;
 import com.xuecheng.orders.mapper.XcOrdersGoodsMapper;
 import com.xuecheng.orders.mapper.XcOrdersMapper;
 import com.xuecheng.orders.mapper.XcPayRecordMapper;
@@ -24,6 +27,11 @@ import com.xuecheng.orders.model.po.XcOrdersGoods;
 import com.xuecheng.orders.model.po.XcPayRecord;
 import com.xuecheng.orders.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +62,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderServiceImpl currentProxy;
 
+    @Autowired
+    MqMessageService mqMessageService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
     @Value("${pay.alipay.APP_ID}")
     String APP_ID;
     @Value("${pay.alipay.APP_PRIVATE_KEY}")
@@ -66,10 +81,10 @@ public class OrderServiceImpl implements OrderService {
     public PayRecordDto createOrder(String userId, AddOrderDto addOrderDto) {
         //创建商品订单
         XcOrders orders = saveXcOrders(userId, addOrderDto);
-        if(orders==null){
+        if (orders == null) {
             XueChengPlusException.cast("订单创建失败");
         }
-        if(orders.getStatus().equals("600002")){
+        if (orders.getStatus().equals("600002")) {
             XueChengPlusException.cast("订单已支付");
         }
         //生成支付记录
@@ -84,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
             XueChengPlusException.cast("生成二维码出错");
         }
         PayRecordDto payRecordDto = new PayRecordDto();
-        BeanUtils.copyProperties(payRecord,payRecordDto);
+        BeanUtils.copyProperties(payRecord, payRecordDto);
         payRecordDto.setQrcode(qrCode);
 
         return payRecordDto;
@@ -97,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PayRecordDto queryPayResult(String payNo){
+    public PayRecordDto queryPayResult(String payNo) {
         XcPayRecord payRecord = getPayRecordByPayno(payNo);
         if (payRecord == null) {
             XueChengPlusException.cast("请重新点击支付获取二维码");
@@ -113,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
         //从支付宝查询支付结果
         PayStatusDto payStatusDto = queryPayResultFromAlipay(payNo);
         //保存支付结果
-        currentProxy.saveAliPayStatus( payStatusDto);
+        currentProxy.saveAliPayStatus(payStatusDto);
         //重新查询支付记录
         payRecord = getPayRecordByPayno(payNo);
         PayRecordDto payRecordDto = new PayRecordDto();
@@ -124,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 请求支付宝查询支付结果
+     *
      * @param payNo 支付交易号
      * @return 支付结果
      */
@@ -178,9 +194,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     /**
-     * @description 保存支付宝支付结果
-     * @param payStatusDto  支付结果信息
+     * @param payStatusDto 支付结果信息
      * @return void
+     * @description 保存支付宝支付结果
      * @author Mr.M
      * @date 2022/10/4 16:52
      */
@@ -195,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
         }
         //支付结果
         String trade_status = payStatusDto.getTrade_status();
-        log.debug("收到支付结果:{},支付记录:{}}", payStatusDto.toString(),payRecord.toString());
+        log.debug("收到支付结果:{},支付记录:{}}", payStatusDto.toString(), payRecord.toString());
         if (trade_status.equals("TRADE_SUCCESS")) {
 
             //支付金额变为分
@@ -204,7 +220,7 @@ public class OrderServiceImpl implements OrderService {
             //校验是否一致
             if (!payStatusDto.getApp_id().equals(APP_ID) || totalPrice.intValue() != total_amount.intValue()) {
                 //校验失败
-                log.info("校验支付结果失败,支付记录:{},APP_ID:{},totalPrice:{}" ,payRecord.toString(),payStatusDto.getApp_id(),total_amount.intValue());
+                log.info("校验支付结果失败,支付记录:{},APP_ID:{},totalPrice:{}", payRecord.toString(), payStatusDto.getApp_id(), total_amount.intValue());
                 XueChengPlusException.cast("校验支付结果失败");
             }
             log.debug("更新支付结果,支付交易流水号:{},支付结果:{}", payNo, trade_status);
@@ -236,18 +252,21 @@ public class OrderServiceImpl implements OrderService {
                 log.info("更新订单表状态失败,订单号:{}", orderId);
                 XueChengPlusException.cast("更新订单表状态失败");
             }
+
+            //保存消息记录,参数1：支付结果通知类型，2: 业务id，3:业务类型
+            MqMessage mqMessage = mqMessageService.addMessage("payresult_notify", orders.getOutBusinessId(), orders.getOrderType(), null);
+            //通知消息
+            notifyPayResult(mqMessage);
         }
 
     }
 
 
-
-
     @Transactional
-    public XcOrders saveXcOrders(String userId, AddOrderDto addOrderDto){
+    public XcOrders saveXcOrders(String userId, AddOrderDto addOrderDto) {
         //幂等性处理
         XcOrders order = getOrderByBusinessId(addOrderDto.getOutBusinessId());
-        if(order!=null){
+        if (order != null) {
             return order;
         }
         order = new XcOrders();
@@ -266,9 +285,9 @@ public class OrderServiceImpl implements OrderService {
         ordersMapper.insert(order);
         String orderDetailJson = addOrderDto.getOrderDetail();
         List<XcOrdersGoods> xcOrdersGoodsList = JSON.parseArray(orderDetailJson, XcOrdersGoods.class);
-        xcOrdersGoodsList.forEach(goods->{
+        xcOrdersGoodsList.forEach(goods -> {
             XcOrdersGoods xcOrdersGoods = new XcOrdersGoods();
-            BeanUtils.copyProperties(goods,xcOrdersGoods);
+            BeanUtils.copyProperties(goods, xcOrdersGoods);
             xcOrdersGoods.setOrderId(orderId);//订单号
             ordersGoodsMapper.insert(xcOrdersGoods);
         });
@@ -281,11 +300,11 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
-    public XcPayRecord createPayRecord(XcOrders orders){
-        if(orders==null){
+    public XcPayRecord createPayRecord(XcOrders orders) {
+        if (orders == null) {
             XueChengPlusException.cast("订单不存在");
         }
-        if(orders.getStatus().equals("600002")){
+        if (orders.getStatus().equals("600002")) {
             XueChengPlusException.cast("订单已支付");
         }
         XcPayRecord payRecord = new XcPayRecord();
@@ -304,7 +323,36 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    @Override
+    public void notifyPayResult(MqMessage message) {
 
+        //1、消息体，转json
+        String msg = JSON.toJSONString(message);
+        //设置消息持久化
+        Message msgObj = MessageBuilder.withBody(msg.getBytes(StandardCharsets.UTF_8))
+                .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
+                .build();
+        // 2.全局唯一的消息ID，需要封装到CorrelationData中
+        CorrelationData correlationData = new CorrelationData(message.getId().toString());
+        // 3.添加callback
+        correlationData.getFuture().addCallback(
+                result -> {
+                    if (result.isAck()) {
+                        // 3.1.ack，消息成功
+                        log.debug("通知支付结果消息发送成功, ID:{}", correlationData.getId());
+                        //删除消息表中的记录
+                        mqMessageService.completed(message.getId());
+                    } else {
+                        // 3.2.nack，消息失败
+                        log.error("通知支付结果消息发送失败, ID:{}, 原因{}", correlationData.getId(), result.getReason());
+                    }
+                },
+                ex -> log.error("消息发送异常, ID:{}, 原因{}", correlationData.getId(), ex.getMessage())
+        );
+        // 发送消息
+        rabbitTemplate.convertAndSend(PayNotifyConfig.PAYNOTIFY_EXCHANGE_FANOUT, "", msgObj, correlationData);
+
+    }
 
 
 }
