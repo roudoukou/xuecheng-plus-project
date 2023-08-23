@@ -42,6 +42,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -280,7 +281,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
             CoursePublish coursePublish = getCoursePublish(courseId);
             // if (coursePublish != null) {
                 // 查询完成再存储到redis
-                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30 + new Random(100).nextInt(), TimeUnit.SECONDS);
             // }
             return coursePublish;
         }
