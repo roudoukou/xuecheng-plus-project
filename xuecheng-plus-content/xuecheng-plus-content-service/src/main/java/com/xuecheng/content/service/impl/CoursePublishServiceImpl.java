@@ -27,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -40,6 +42,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -68,6 +71,9 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Autowired
     MediaServiceClient mediaServiceClient;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
 
     @Override
@@ -254,6 +260,30 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     public CoursePublish getCoursePublish(Long courseId){
         CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
         return coursePublish ;
+    }
+
+    @Override
+    public CoursePublish getCoursePublishCache(Long courseId) {
+        // 从缓存中查询
+        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+        // 缓存中有
+        if (jsonObj != null) {
+            // 缓存中有直接返回数据
+            String jsonString = jsonObj.toString();
+            if(("null").equals(jsonString)) {
+                return null;
+            }
+            CoursePublish coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+            return coursePublish;
+        } else {
+            // 从数据库查询
+            CoursePublish coursePublish = getCoursePublish(courseId);
+            // if (coursePublish != null) {
+                // 查询完成再存储到redis
+                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30, TimeUnit.SECONDS);
+            // }
+            return coursePublish;
+        }
     }
 
 
