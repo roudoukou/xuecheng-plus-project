@@ -8,3 +8,7 @@ POST {{checkcode_host}}/checkcode/pic
 
 ### 校验验证码
 POST {{checkcode_host}}/checkcode/verify?key=checkcode:0847f335cd024ee38b5a004b366b809d&code=thhr
+
+
+### 申请验证码 服务器
+POST 192.168.101.65:63075/checkcode/pic
