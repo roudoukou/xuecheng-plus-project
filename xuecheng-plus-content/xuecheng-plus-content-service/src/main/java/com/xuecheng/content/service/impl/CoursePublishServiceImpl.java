@@ -265,25 +265,29 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Override
     public CoursePublish getCoursePublishCache(Long courseId) {
-        // 从缓存中查询
-        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
-        // 缓存中有
-        if (jsonObj != null) {
-            // 缓存中有直接返回数据
-            String jsonString = jsonObj.toString();
-            if(("null").equals(jsonString)) {
-                return null;
-            }
-            CoursePublish coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
-            return coursePublish;
-        } else {
-            // 从数据库查询
-            CoursePublish coursePublish = getCoursePublish(courseId);
-            // if (coursePublish != null) {
+        synchronized (this) {
+            // 从缓存中查询
+            Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+            // 缓存中有
+            if (jsonObj != null) {
+                // 缓存中有直接返回数据
+                String jsonString = jsonObj.toString();
+                if(("null").equals(jsonString)) {
+                    return null;
+                }
+                CoursePublish coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+                return coursePublish;
+            } else {
+                // 从数据库查询
+                System.out.println("查询数据库");
+                CoursePublish coursePublish = getCoursePublish(courseId);
+                // if (coursePublish != null) {
                 // 查询完成再存储到redis
-                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30 + new Random(100).nextInt(), TimeUnit.SECONDS);
-            // }
-            return coursePublish;
+                // 设置缓存不过期
+                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 300, TimeUnit.SECONDS);
+                // }
+                return coursePublish;
+            }
         }
     }
 
